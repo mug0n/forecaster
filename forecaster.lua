@@ -2,7 +2,7 @@ addon.author        = "mug0n"
 addon.desc          = "A weather forecast addon for Ashita v4"
 addon.link          = "https://github.com/mug0n/forecaster"
 addon.name          = "forecaster"
-addon.version       = "2.0"
+addon.version       = "2.1"
 
 
 require("common")
@@ -37,9 +37,8 @@ function Forecaster.printToChat(zoneID, zoneName, numDays)
 
     print(string.format("=== %s - %u Day Forecast ===", zoneName, numDays))
     for i = 0, numDays - 1, 1 do
-        local daysOffset = (i * 1440)
-        local forecastDate, forecastDOTW = VanaUtils.getVanaDate(vanaTime + daysOffset)
-        local forecast = Weather.getWeather(weatherData, Weather.getWeatherDay(baseTime + daysOffset))
+        local forecastDate, forecastDOTW = VanaUtils.getVanaDate(vanaTime + (i * 1440))
+        local forecast = Weather.getWeather(weatherData, Weather.getWeatherDay(baseTime + (i * 3456)))
 
         local flatten = {}
         for _, v in ipairs(forecast) do
@@ -116,13 +115,9 @@ ashita.events.register("d3d_present", "forecaster_present", function ()
             ImGuiWindowFlags_NoNav ))
     ) then
         -- caption text
-        imgui.Text("[")
+        imgui.TextColored({ 0.508, 0.712, 0.832, 1.0 }, zoneName)
         imgui.SameLine()
-        imgui.TextColored({ 0.462, 0.647, 0.756, 1.0 }, addon.name)
-        imgui.SameLine()
-        imgui.Text("]")
-        imgui.SameLine()
-        imgui.TextAlignRight(zoneName)
+        imgui.TextAlignRight(Weather.effectValueToText(Weather.getCurrentWeather()))
 
         -- 2 columns, forecast for today and tomorrow
         local columnWidth = imgui.GetWindowWidth() / 2 - imgui.GetStyle().FramePadding.x
@@ -130,9 +125,9 @@ ashita.events.register("d3d_present", "forecaster_present", function ()
         imgui.Separator()
 
         for k, v in pairs({ "Today", "Tomorrow" }) do
-            local daysOffset = ((k - 1) * 1440)
-            local _, forecastDOTW = VanaUtils.getVanaDate(vanaTime + daysOffset)
-            local forecast = Weather.getWeather(weatherData, Weather.getWeatherDay(baseTime + daysOffset))
+            local daysOffset = k - 1
+            local _, forecastDOTW = VanaUtils.getVanaDate(vanaTime + (daysOffset * 1440))
+            local forecast = Weather.getWeather(weatherData, Weather.getWeatherDay(baseTime + (daysOffset * 3456)))
 
             -- header which consist of the day indicator and day of the week
             imgui.SetColumnWidth(-1, columnWidth)

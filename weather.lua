@@ -641,11 +641,21 @@ Weather.Data = {
 }
 
 --[[
+    Returns the current weather id
+
+    @return {number}                Weather id, i.e. 6
+]]--
+function Weather.getCurrentWeather()
+    local pointer = ashita.memory.read_uint32(ashita.memory.find("FFXiMain.dll", 0, "66A1????????663D????72", 0, 0) + 0x02)
+    return ashita.memory.read_uint8(pointer + 0)
+end
+
+--[[
     Converts weather ID to text value
 
     @param  {number} weatherID      Weather id, i.e. 6
     @return {string}                Weather text, i.e. "Rain", or nil upon failure
---]]
+]]--
 function Weather.effectValueToText(weatherID)
     return Weather.Effects[weatherID] or nil
 end
