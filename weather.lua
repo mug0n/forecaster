@@ -5,7 +5,7 @@
         https://github.com/LandSandBoat/server/blob/base/sql/zone_weather.sql
 ]]--
 
-require("helpers")
+require("common")
 local VanaUtils = require("vanautils")
 local Weather = {}
 
@@ -668,7 +668,7 @@ end
 ]]--
 function Weather.getData(zoneID, trace)
     -- defaulting to empty table
-    trace = trace or {}
+    trace = trace or T{}
     local data = Weather.Data[zoneID]
 
     -- value could either be the data string or a reference to another data string
@@ -678,8 +678,8 @@ function Weather.getData(zoneID, trace)
 
         elseif type(data) == "number" then
             -- make sure we havnt been there before
-            if not table.contains(trace, data) then
-                table.insert(trace, data)
+            if not trace:contains(data) then
+                trace:append(data)
                 return Weather.getData(data, trace)
             end
         end

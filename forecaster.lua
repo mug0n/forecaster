@@ -4,7 +4,6 @@ addon.link          = "https://github.com/mug0n/forecaster"
 addon.name          = "forecaster"
 addon.version       = "2.1"
 
-
 require("common")
 local Weather = require("weather")
 local VanaUtils = require("vanautils")
@@ -87,8 +86,8 @@ end)
 
 
 --[[
-    event: command
-    desc : Event called when the addon is processing a command.
+    event: d3d_present
+    desc : Event called when the Direct3D device is presenting a scene.
 --]]
 ashita.events.register("d3d_present", "forecaster_present", function ()
     -- get current zone information

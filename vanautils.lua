@@ -5,7 +5,6 @@
         https://github.com/LandSandBoat/server/blob/base/scripts/commands/zone.lua
 ]]--
 
-require("helpers")
 local VanaUtils = {}
 
 VanaUtils.Weekdays = {
@@ -315,13 +314,13 @@ end
 ]]--
 function VanaUtils.getZoneByInput(input)
     -- input might be an id or an auto-translate string
-    local charPos = string.getCharPos(input, 253)
-    if (charPos ~= nil) then
-        -- input looks like auto-translate
-        local groupId = string.byte(input, charPos + 3)
-        local messageId = string.byte(input, charPos + 4)
+    local charPos = string.byte(input, 1)
+    if (charPos == 253) then
+        -- input looks like auto-translate   
+        local groupId = string.byte(input, 4)  
+        local messageId = string.byte(input, 5)
 
-        for k, v in pairs(VanaUtils.Zones) do
+        for k, v in pairs(VanaUtils.Zones) do  
             if v[1] == groupId and v[2] == messageId then
                 return v[3], v[4]
             end
